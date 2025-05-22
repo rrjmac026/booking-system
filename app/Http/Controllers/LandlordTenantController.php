@@ -72,4 +72,23 @@ class LandlordTenantController extends Controller
             return redirect()->route('landlord.tenants.index')->withErrors('Something went wrong while registering the tenant.');
         }
     }
+
+    public function enable($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_active = true;
+        $user->save();
+
+        return redirect()->route('landlord.tenants.index')->with('success', 'Tenant enabled successfully.');
+    }
+
+    public function disable($id)
+    {
+        $user = User::findOrFail($id);
+        $user->is_active = false;
+        $user->save();
+
+        return redirect()->route('landlord.tenants.index')->with('success', 'Tenant disabled successfully.');
+    }
+
 }

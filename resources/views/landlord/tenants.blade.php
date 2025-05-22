@@ -32,6 +32,7 @@
                   <th scope="col" class="px-6 py-3 whitespace-nowrap">Domain</th>
                   <th scope="col" class="px-6 py-3">Subscription</th>
                   <th scope="col" class="px-6 py-3">Status</th>
+                  <th scope="col" class="px-6 py-3">Actions</th> <!-- NEW: Actions column -->
                   <th scope="col" class="px-6 py-3 whitespace-nowrap">Subscription Date</th>
                   <th scope="col" class="px-6 py-3 whitespace-nowrap">Expiration Date</th>
                </tr>
@@ -52,16 +53,35 @@
                         {{ $tenant->subdomain }}
                      </td>
                      <td class="px-6 py-4">
-                        {{ $tenant->subscription}}
+                        {{ $tenant->subscription }}
                      </td>
                      <td class="px-6 py-4">
-                        active
+                        {{ $tenant->is_active ? 'Active' : 'Inactive' }}
+                     </td>
+                     <td class="px-6 py-4">
+                        @if ($tenant->is_active)
+                           <form action="{{ route('landlord.tenants.disable', $tenant->id) }}" method="POST">
+                              @csrf
+                              @method('PATCH')
+                              <button type="submit" class="text-white bg-yellow-500 hover:bg-yellow-600 font-medium rounded-lg text-xs px-4 py-2">
+                                 Disable
+                              </button>
+                           </form>
+                        @else
+                           <form action="{{ route('landlord.tenants.enable', $tenant->id) }}" method="POST">
+                              @csrf
+                              @method('PATCH')
+                              <button type="submit" class="text-white bg-green-600 hover:bg-green-700 font-medium rounded-lg text-xs px-4 py-2">
+                                 Enable
+                              </button>
+                           </form>
+                        @endif
                      </td>
                      <td class="px-6 py-4 whitespace-nowrap">
                         {{ $tenant->created_at->format('g:iA M/d/Y') }}
                      </td>
                      <td class="px-6 py-4 whitespace-nowrap">
-                        {{ $tenant->expiration_date->format('g:iA M/d/Y')}}
+                        {{ $tenant->expiration_date->format('g:iA M/d/Y') }}
                      </td>
                   </tr>
                @endforeach

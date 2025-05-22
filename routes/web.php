@@ -33,10 +33,15 @@ foreach (config('tenancy.central_domains') as $domain) {
 
         Route::middleware('landlord')->prefix('landlord')->group(function () {
             Route::get('/dashboard', [LandlordDashboardController::class, 'index'])->name('landlord.dashboard.index');
-             Route::post('/tenants/generateReports', [LandlordDashboardController::class, 'generateReports'])->name('landlord.tenants.generateReports');
+            Route::post('/tenants/generateReports', [LandlordDashboardController::class, 'generateReports'])->name('landlord.tenants.generateReports');
 
             Route::get('/tenants', [LandlordTenantController::class, 'index'])->name('landlord.tenants.index');
             Route::post('/tenants/store', [LandlordTenantController::class, 'store'])->name('landlord.tenants.store');
+
+            // ✅ Enable/Disable routes
+            Route::patch('/tenants/{id}/enable', [LandlordTenantController::class, 'enable'])->name('landlord.tenants.enable');
+            Route::patch('/tenants/{id}/disable', [LandlordTenantController::class, 'disable'])->name('landlord.tenants.disable');
         });
+
     });
 }
